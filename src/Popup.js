@@ -12,7 +12,6 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
     width: 400,
-  //height: 50,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 35,
@@ -46,7 +45,6 @@ function Popup( props ) {
     }
 
     const handleSpin = () => {
-        debugger
         if (balance > 0) {
             let a = Math.floor(Math.random() * 4) + 1
             let b = Math.floor(Math.random() * 4) + 1
@@ -82,8 +80,7 @@ function Popup( props ) {
                         sum: 0.5
                     };
                 });
-            }
-                    
+            }   
         setData((prevState) => {
             return {
               ...prevState,
@@ -105,10 +102,7 @@ function Popup( props ) {
             });
         }
         props.parentCallBackPopup(data.sum);
-        
     }
-
-    
 
     const cardAllocate = (x) => {
         if (x === 4) {
