@@ -1,7 +1,6 @@
 
 import React , {useState , useEffect} from 'react';
 import './App.css';
-import MyRouts from './routes';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -35,6 +34,15 @@ function Home() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState()
+    const [a, setA] = useState('');
+    let array = [];
+    const [state, setState] = React.useState({
+        balance: 0,
+        account: 'Login',
+        money: 0,
+
+    })
+    const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
@@ -44,31 +52,24 @@ function Home() {
         }
       }, []);
 
-    const handleSubmit = async e => {
-
-        e.preventDefault();
+    const handleSubmit = () => {
+        localStorage.setItem('user', username)
+        localStorage.setItem('password', password)
+        setOpen(false);
+        setState((prevState) => {
+            return {
+              ...prevState,
+                account: 'Logout',
+                balance: 10,
+            };
+          });
         const user = { username, password };
         // send the username and password to the server
-        const response = await axios.post(
-          "http://blogservice.herokuapp.com/api/login",
-          user
-        );
         // set the state of the user
-        setUser(response.data)
         // store the user in localStorage
-        localStorage.setItem('user', response.data)
-        console.log(response.data)
+        //localStorage.setItem('user', response.data)
     
     };
-
-    const [state, setState] = React.useState({
-        balance: 0,
-        name: '',
-        account: 'Login',
-
-    })
-
-    const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -87,27 +88,42 @@ function Home() {
           });
     }
 
-    const handleLogin = (e) => {
-        setOpen(false);
-        setState((prevState) => {
-            return {
-              ...prevState,
-                account: 'Logout',
-              balance: 10,
-            };
-          });
-    };
-
     const handleLogout = (e) => {
         setOpen(false);
+        //localStorage.clear()
+        localStorage.removeItem('user');
+        localStorage.removeItem('password');
         setState((prevState) => {
             return {
               ...prevState,
                 account: 'Login',
-              name: '',
+                balance: 0,
             };
           });
     };
+
+    const callBackFunction = (sum) => {
+        if (sum !== 'better luck next time') {
+            let x = state.balance - 2 + sum
+            setState((prevState) => {
+                return {
+                  ...prevState,
+                    balance: x,
+                };
+              });
+        } else {
+            let x = state.balance - 2
+            setState((prevState) => {
+                return {
+                  ...prevState,
+                  balance: x,
+                };
+              });
+        }
+        
+        setA(sum)
+        array.push(sum)
+    }
 
     function createData(name, calories, fat, carbs, protein) {
         return { name, calories, fat, carbs, protein };
@@ -129,7 +145,7 @@ function Home() {
                 <h1>Casino Royale</h1>
             </Grid>
             <Grid item xs={8} mt={1}>
-                      <h2>Balance $ {state.balance }</h2>
+                      <h2>Balance $ { state.balance }</h2>
             </Grid>
                   <Grid item xs={1} mt={3}>
                 { state.account === 'Login' ?
@@ -167,7 +183,7 @@ function Home() {
                               
 
 
-                              <form onSubmit={handleSubmit}>
+                              
                         <TextField
                             autoFocus
                             margin="dense"
@@ -191,27 +207,28 @@ function Home() {
                                   variant="standard"
                                   onChange={({ target }) => setPassword(target.value)}
                               />
-                              
-
-</form>
+             
                         </DialogContent>
                         <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit" onClick={handleLogin}>login</Button>
+                        <Button type="submit" onClick={handleSubmit}>login</Button>
                         </DialogActions>
                     </Dialog>
                     
                   </Grid>
                   <Grid item xs={1} mt={3}>
-                      <Avatar sx={{ bgcolor: deepOrange[500] }}>{ state.name ? state.name : 'Guest' }</Avatar>
+                      <Avatar sx={{ bgcolor: deepOrange[500] }}>{ username ? username[0] : 'G' }</Avatar>
             </Grid>
                   
       
       </Grid>
       </header>
 
-      <section className='section'>
-              <Popup />
+          <section className='section'>
+              { state.balance < 0  ? <h1>Game Over </h1> : 
+              <Popup
+                  parentCallBackPopup={callBackFunction}
+              /> }
               <div className='container' >
               <TableContainer component={Paper}>
                       <Table sx={{ minWidth: 650 }} aria-label="simple table" mt={4 }>

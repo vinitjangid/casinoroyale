@@ -15,53 +15,98 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+    width: 400,
+  //height: 50,
   bgcolor: 'background.paper',
   border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
+  boxShadow: 35,
+  p: 10,
 };
 
-function Popup() {
+function Popup( props ) {
     const [data, setData] = React.useState({
-        fakeSpin: false,
         card1: '',
         card2: '',
         card3: '',
+        sum:'',
     })
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
         setData({fakeSpin: false})
     }
     
     const handleFakeSpin = () => {
-        setData({fakeSpin: true})
-    }
-
-    const handleSpin = () => {
-        let a = cardAllocate();
-        let b = cardAllocate();
-        let c = cardAllocate();
-        console.log(a,b,c)
         setData((prevState) => {
             return {
               ...prevState,
-                card1: a,
-                card2: b,
-                card3: c,
+                card1: '♠',
+                card2: '♠',
+                card3: '♠',
+                sum: 'Its a Fake Spin',
             };
           });
     }
 
-    const cardAllocate = () => {
-        let x = Math.floor(Math.random() * 4)
-        if (x === 3) {
+    const handleSpin = () => {
+        let a = Math.floor(Math.random() * 4) + 1
+        let b = Math.floor(Math.random() * 4) + 1
+        let c = Math.floor(Math.random() * 4) + 1
+        const x = cardAllocate(a)
+        const y = cardAllocate(b)
+        const z = cardAllocate(c)
+        if (a === 4 && b === 4 && c === 4 ) {
+            setData((prevState) => {
+                return {
+                  ...prevState,
+                    sum: 5
+                };
+              });
+        } else if ( a === b && b === c ) {
+            setData((prevState) => {
+                return {
+                  ...prevState,
+                    sum: 2
+                };
+              });
+        } else if ( a !== b && b !== c && a !== c ) {
+            setData((prevState) => {
+                return {
+                  ...prevState,
+                    sum: 'better luck next time'
+                };
+              });
+        } else {
+            setData((prevState) => {
+                return {
+                  ...prevState,
+                    sum: 0.5
+                };
+            });
+        }
+        
+        setData((prevState) => {
+            return {
+              ...prevState,
+                card1: x,
+                card2: y,
+                card3: z,
+            };
+        
+        });
+        props.parentCallBackPopup(data.sum);
+        
+    }
+
+    
+
+    const cardAllocate = (x) => {
+        if (x === 4) {
             return '♠'
-        } else if ( x === 2) {
+        } else if ( x === 3) {
             return '♣'
-        } else if ( x === 1) {
+        } else if ( x === 2) {
             return '♥'
         } else {
             return '♦'
@@ -70,7 +115,8 @@ function Popup() {
 
   return (
       <div>
-      <Button size='large' variant="contained" onClick={handleOpen}>Play Game</Button>
+          <Button size='large' variant="contained" onClick={handleOpen}>Play Game</Button>
+          <Box mt={3}/>
       <Modal
         open={open}
         onClose={handleClose}
@@ -78,15 +124,19 @@ function Popup() {
         aria-describedby="modal-modal-description"
           >
               <Box sx={style}>
-              <Grid container spacing={2} >
-                  <Typography variant="h1" > {data.card1 ? data.card1 : null}</Typography>
-                  <Typography variant="h1" > {data.card2 ? data.card2 : null}</Typography>
+              <Grid container spacing={1} direction="row" alignItems="center" justifyContent="center"  >
+                      <Typography variant="h1" > {data.card1 ? data.card1 : null}</Typography>
+                      <Box ml={3}/>
+                      <Typography variant="h1" > {data.card2 ? data.card2 : null}</Typography>
+                      <Box ml={3}/>
                   <Typography variant="h1" > {data.card3 ? data.card3 : null }</Typography>
-            </Grid>
-                {data.fakeSpin ? <h2> You got ♠♠♠ </h2> : null }
+                  </Grid>
+                  <Grid container spacing={1} direction="row"  alignItems="center" justifyContent="center">
+                  {data.sum > 0 ? <h2> You win $ {data.sum} </h2> : <h2> {data.sum}   </h2> }
+                  </Grid>
         <Stack direction="row" spacing={2}>
-                      
-        <Button variant="contained" onClick={handleSpin}>SPIN</Button>
+            
+        <Button size='large' variant="contained" onClick={handleSpin}>SPIN</Button>
                       
         <Button variant="contained" onClick={handleFakeSpin}>
             FAKE SPIN
