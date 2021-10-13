@@ -1,4 +1,4 @@
-import React , {useState , useEffect} from 'react';
+import React , {useState} from 'react';
 import './App.css';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -25,21 +25,12 @@ import Paper from '@mui/material/Paper';
 function Home() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-  const [user, setUser] = useState();
     const [array, setArray] = useState([])
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({
         balance: 0,
         account: 'Login',
     })
-    
-    useEffect(() => {
-        const loggedInUser = localStorage.getItem("user");
-        if (loggedInUser) {
-          const foundUser = JSON.parse(loggedInUser);
-          setUser(foundUser);
-        }
-      }, []);
 
     const handleSubmit = () => {
         localStorage.setItem('user', username)

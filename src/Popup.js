@@ -3,12 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import CardContent from '@mui/material/CardContent';
-import Card from 'material-ui/Card';
 import { Grid } from '@mui/material';
-import { deepOrange, deepPurple } from '@mui/material/colors';
 
 const style = {
   position: 'absolute',
@@ -164,11 +160,3 @@ function Popup( props ) {
 }
 
 export default Popup;
-
-
-// if arr[0] == arr[1] and arr[1] == arr[2]:
-//     #all equal
-// elif arr[0] != arr[1] and arr[0] != arr[2] and arr[1] != arr[2]:
-//     #all unequal
-// else:
-//     #two equal
