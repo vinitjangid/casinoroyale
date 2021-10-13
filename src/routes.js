@@ -11,7 +11,7 @@ class MyRouts extends React.Component {
         <Router>
             <Route exact path="/" component={Home} />
         </Router>
-      </div>
+      </div> 
     );
   }
 }
