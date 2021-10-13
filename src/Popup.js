@@ -41,7 +41,6 @@ function Popup( props ) {
                 card1: '♠',
                 card2: '♠',
                 card3: '♠',
-                sum: 'Its a Fake Spin',
             };
           });
     }
@@ -94,12 +93,14 @@ function Popup( props ) {
             };
         });
         } else {
+            setOpen(false);
             setData((prevState) => {
                 return {
                   ...prevState,
-                    card1: 'zero',
-                    card2: 'balance',
+                    card1: '',
+                    card2: '',
                     card3: '',
+                    sum: '',
                 };
             });
         }
