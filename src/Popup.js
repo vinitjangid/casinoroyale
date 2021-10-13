@@ -30,6 +30,7 @@ function Popup( props ) {
         card3: '',
         sum:'',
     })
+    const balance = props.balance;
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -50,42 +51,44 @@ function Popup( props ) {
     }
 
     const handleSpin = () => {
-        let a = Math.floor(Math.random() * 4) + 1
-        let b = Math.floor(Math.random() * 4) + 1
-        let c = Math.floor(Math.random() * 4) + 1
-        const x = cardAllocate(a)
-        const y = cardAllocate(b)
-        const z = cardAllocate(c)
-        if (a === 4 && b === 4 && c === 4 ) {
-            setData((prevState) => {
-                return {
-                  ...prevState,
-                    sum: 5
-                };
-              });
-        } else if ( a === b && b === c ) {
-            setData((prevState) => {
-                return {
-                  ...prevState,
-                    sum: 2
-                };
-              });
-        } else if ( a !== b && b !== c && a !== c ) {
-            setData((prevState) => {
-                return {
-                  ...prevState,
-                    sum: 'better luck next time'
-                };
-              });
-        } else {
-            setData((prevState) => {
-                return {
-                  ...prevState,
-                    sum: 0.5
-                };
-            });
-        }
-        
+        debugger
+        if (balance > 0) {
+            let a = Math.floor(Math.random() * 4) + 1
+            let b = Math.floor(Math.random() * 4) + 1
+            let c = Math.floor(Math.random() * 4) + 1
+            const x = cardAllocate(a)
+            const y = cardAllocate(b)
+            const z = cardAllocate(c)
+            if (a === 4 && b === 4 && c === 4 ) {
+                setData((prevState) => {
+                    return {
+                      ...prevState,
+                        sum: 5
+                    };
+                  });
+            } else if ( a === b && b === c ) {
+                setData((prevState) => {
+                    return {
+                      ...prevState,
+                        sum: 2
+                    };
+                  });
+            } else if ( a !== b && b !== c && a !== c ) {
+                setData((prevState) => {
+                    return {
+                      ...prevState,
+                        sum: 'better luck next time'
+                    };
+                  });
+            } else {
+                setData((prevState) => {
+                    return {
+                      ...prevState,
+                        sum: 0.5
+                    };
+                });
+            }
+                    
         setData((prevState) => {
             return {
               ...prevState,
@@ -93,8 +96,17 @@ function Popup( props ) {
                 card2: y,
                 card3: z,
             };
-        
         });
+        } else {
+            setData((prevState) => {
+                return {
+                  ...prevState,
+                    card1: 'zero',
+                    card2: 'balance',
+                    card3: '',
+                };
+            });
+        }
         props.parentCallBackPopup(data.sum);
         
     }
